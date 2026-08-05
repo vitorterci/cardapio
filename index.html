@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kaffee Für Alle</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Quicksand:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="assets/css/main.css" />
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="cabecalho">
+    <div class="logo">
+      <img src="assets/img/logos/logo.png" alt="Logotipo Kaffee Für Alle">
+    </div>
+
+    <nav class="menu">
+      <a href="#">INICIO</a>
+      <a href="index.html">CARDÁPIO</a>
+      <a href="#">SOBRE NÓS</a>
+      <a href="pages/noticias.html">NOTÍCIAS</a>
+      <a href="pages/musica.html">MÚSICA</a>
+
+      <div class="BarraPesquisa">
+        <button class="botao" type="button" aria-label="Abrir pesquisa">
+          <img class="abrir" src="assets/img/icons/search.png" alt="Ícone de pesquisa">
+          <img class="fechar" src="assets/img/icons/close.png" alt="Fechar pesquisa">
+        </button>
+        <input type="text" class="texto" placeholder="pesquisa">
+      </div>
+    </nav>
+
+    <div class="icones">
+      <a href="#"><img src="assets/img/icons/heart.png" alt="Ícone de coração"></a>
+      <a href="#"><img src="assets/img/icons/cart.png" alt="Ícone de carrinho"></a>
+      <a href="#"><img src="assets/img/icons/profile.png" alt="Ícone de perfil"></a>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="conteudo">
+    <a class="card" href="pages/bebidas.html">
+      <h2>BEBIDAS</h2>
+      <div class="ilustra ilustra-bebidas"></div>
+    </a>
+
+    <a class="card" href="pages/salgados.html">
+      <h2>SALGADOS</h2>
+      <div class="ilustra ilustra-salgados"></div>
+    </a>
+
+    <a class="card" href="pages/doces.html">
+      <h2>DOCES</h2>
+      <div class="ilustra ilustra-doces"></div>
+    </a>
+
+    <a class="card" href="#paes">
+      <h2>PÃES</h2>
+      <div class="ilustra ilustra-paes"></div>
+    </a>
+  </main>
+
+  <!-- CATEGORIAS -->
+  <section class="categorias">
+    <a href="pages/bebidas.html">
+      <article>
+        <h3>Bebidas</h3>
+        <p>Café, cappuccino, chá e outras opções.</p>
+      </article>
+    </a>
+
+    <a href="pages/salgados.html">
+      <article>
+        <h3>Salgados</h3>
+        <p>Croissant, empadas, sanduíches e lanches.</p>
+      </article>
+    </a>
+
+    <a href="pages/doces.html">
+      <article>
+        <h3>Doces</h3>
+        <p>Bolos, cupcakes, tortas e sobremesas.</p>
+      </article>
+    </a>
+
+    <a href="#paes">
+      <article>
+        <h3>Pães</h3>
+        <p>Pães artesanais, pão na chapa e opções frescas.</p>
+      </article>
+    </a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="divider"></div>
+
+      <div class="brand-block">
+        <span class="brand-name">DevStudio</span>
+        <nav class="nav" id="footer-nav"></nav>
+      </div>
+
+      <div class="divider-dashed"></div>
+
+      <div class="bottom">
+        <p class="copyright">© DevStudios LLABC</p>
+        <div class="socials" id="footer-socials"></div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

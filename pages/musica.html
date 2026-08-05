@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vitrola — Player de Vinil</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../assets/css/main.css">
+
+  <style>
+    /* ===== ESTILOS DO PLAYER ===== */
+    .player-card {
+      max-width: 1180px;
+      margin: 0 auto;
+      background: #f1d79f;
+      border: 3px solid #8a4b9b;
+      border-radius: 18px;
+      box-shadow: 0 8px 40px rgba(76, 31, 10, 0.22);
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .back-btn {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #6b240f;
+      color: #fff;
+      text-decoration: none;
+      font-size: 20px;
+      font-weight: 700;
+      z-index: 3;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(40px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .nav-player {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      gap: 24px;
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 18px;
+    }
+    .nav-player a { color: #3d2817; text-decoration: none; }
+    .nav-player a:hover { text-decoration: underline; }
+    .nav-player a.secondary { color: #7a3f24; font-weight: 500; }
+
+    .grid-player {
+      position: relative;
+      z-index: 1;
+      margin-top: 32px;
+      display: grid;
+      gap: 40px;
+      grid-template-columns: 1fr;
+    }
+
+    @media (min-width: 1024px) {
+      .grid-player {
+        grid-template-columns: 1.05fr 0.7fr 1fr;
+      }
+    }
+
+    .vinyl-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .vinyl-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 340px;
+      aspect-ratio: 1 / 1;
+    }
+
+    .tan-arc {
+      position: absolute;
+      inset: -12px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      border-top-color: #c97b5a;
+      border-right-color: #c97b5a;
+    }
+
+    .vinyl-disc {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background:
+        repeating-radial-gradient(
+          circle at center,
+          hsl(0 0% 7%) 0 2px,
+          hsl(0 0% 14%) 2px 3px
+        ),
+        radial-gradient(circle at 28% 24%, hsla(0, 0%, 35%, 0.45), transparent 58%);
+      box-shadow: inset 0 0 60px hsla(0, 0%, 0%, 0.85);
+      animation: spin 4s linear infinite;
+      animation-play-state: paused;
+    }
+
+    .vinyl-disc.spinning {
+      animation-play-state: running;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .vinyl-label {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 34%; height: 34%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      overflow: hidden;
+    }
+
+    .vinyl-label img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+
+    .vinyl-hole {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 4%; height: 4%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    .controls {
+      margin-top: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .controls button {
+      border: none;
+      background: none;
+      cursor: pointer;
+      color: #7a3f24;
+      display: grid;
+      place-items: center;
+      transition: color 0.2s, transform 0.1s;
+      font-size: 20px;
+    }
+
+    .controls button:hover { color: #3d2817; }
+    .controls button:active { transform: scale(0.92); }
+
+    .btn-circle {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      border: 2px solid #3d2817;
+      background: #fff;
+      color: #3d2817;
+    }
+
+    .btn-circle.active {
+      background: #3d2817;
+      color: #fff;
+    }
+
+    .controls button.toggled { color: #8a4b9b; }
+
+    .progress-row {
+      margin-top: 24px;
+      width: 100%;
+      max-width: 340px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .progress-row .time {
+      width: 36px;
+      text-align: center;
+      font-size: 11px;
+      color: #7a3f24;
+      font-variant-numeric: tabular-nums;
+    }
+
+    input[type="range"].slider {
+      -webkit-appearance: none;
+      appearance: none;
+      flex: 1;
+      height: 4px;
+      border-radius: 9999px;
+      background: #e5c7a7;
+      cursor: pointer;
+    }
+
+    input[type="range"].slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: #3d2817;
+    }
+
+    input[type="range"].slider::-moz-range-thumb {
+      width: 14px; height: 14px;
+      border: none;
+      border-radius: 50%;
+      background: #3d2817;
+    }
+
+    .search-btn {
+      margin-top: 28px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 9999px;
+      background: #6b240f;
+      color: #fff;
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      transition: transform 0.15s;
+    }
+
+    .search-btn:hover { transform: scale(1.05); }
+
+    .track-info { display: flex; flex-direction: column; justify-content: center; }
+    .track-info h2 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 36px;
+      font-weight: 900;
+      line-height: 1.1;
+      color: #3d2817;
+    }
+    .track-info .artist {
+      margin-top: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #7a3f24;
+    }
+    .like-row {
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .like-row .divider {
+      flex: 1; height: 1px; background: #f6e4d2;
+    }
+    .like-btn {
+      border: none; background: none; cursor: pointer;
+      color: #7a3f24; transition: color 0.2s;
+      font-size: 24px;
+    }
+    .like-btn.liked { color: #6b240f; }
+    .track-info .about {
+      margin-top: 16px;
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 1.65;
+      color: #7a3f24;
+    }
+
+    .playlist h1 {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 28px;
+      font-weight: 900;
+      color: #3d2817;
+    }
+    .playlist ul { margin-top: 24px; list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .playlist li button {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      gap: 16px;
+      padding: 10px;
+      border: 2px solid transparent;
+      border-radius: 8px;
+      background: #f6e4d2;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .playlist li button:hover { background: #efd1b1; }
+    .playlist li button.active {
+      border-color: #b17bc5;
+      background: #fff;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .playlist img {
+      width: 48px; height: 48px;
+      border-radius: 4px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .playlist .track-name {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #3d2817;
+    }
+    .playlist li button.active .track-name { color: #8a4b9b; }
+    .playlist .status {
+      margin-left: auto;
+      font-size: 11px;
+      font-weight: 500;
+      color: #8a4b9b;
+    }
+
+    .volume-row {
+      margin-top: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .volume-row span { font-size: 11px; font-weight: 500; color: #7a3f24; }
+  </style>
+</head>
+<body>
+
+  <div class="player-card">
+    <a href="../index.html" class="back-btn" title="Voltar" aria-label="Voltar">←</a>
+
+    <span class="blob" style="left:10%;top:8%;width:190px;height:160px;background:#f6e4d2;opacity:.7;"></span>
+    <span class="blob" style="left:20%;top:28%;width:290px;height:240px;background:#efd1b1;opacity:.6;"></span>
+    <span class="blob" style="left:4%;bottom:6%;width:210px;height:145px;background:#f6e4d2;opacity:.5;"></span>
+
+    <nav class="nav-player">
+      <a href="#player" style="font-weight:600;">home</a>
+      <a href="#playlist" class="secondary">playlist</a>
+    </nav>
+
+    <div class="grid-player">
+      <div class="vinyl-column" id="player">
+        <div class="vinyl-wrap">
+          <div class="tan-arc"></div>
+          <div class="vinyl-disc" id="vinylDisc">
+            <div class="vinyl-label">
+              <img id="vinylCover" src="" alt="Capa do álbum" />
+            </div>
+            <div class="vinyl-hole"></div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button id="btnShuffle" title="Aleatório" aria-label="Aleatório">🔀</button>
+          <button id="btnPrev" title="Anterior" aria-label="Anterior">⏮</button>
+          <button id="btnPause" class="btn-circle" title="Pausar" aria-label="Pausar">⏸</button>
+          <button id="btnPlay" class="btn-circle active" title="Tocar" aria-label="Tocar">▶</button>
+          <button id="btnNext" title="Próxima" aria-label="Próxima">⏭</button>
+          <button id="btnRepeat" title="Repetir" aria-label="Repetir">🔁</button>
+        </div>
+
+        <div class="progress-row">
+          <span class="time" id="currentTime">00:00</span>
+          <input type="range" class="slider" id="progressSlider" min="0" max="0" step="0.1" value="0" />
+          <span class="time" id="durationTime">00:00</span>
+        </div>
+
+        <button class="search-btn">🔍 pressione pra buscar uma canção</button>
+      </div>
+
+      <div class="track-info">
+        <h2 id="trackTitle">—</h2>
+        <p class="artist" id="trackArtist">—</p>
+        <div class="like-row">
+          <button class="like-btn" id="likeBtn" aria-label="Curtir">🤍</button>
+          <div class="divider"></div>
+        </div>
+        <p class="about" id="trackAbout">—</p>
+      </div>
+
+      <div class="playlist" id="playlist">
+        <h1>Ouça a nossa Playlist</h1>
+        <ul id="playlistList"></ul>
+
+        <div class="volume-row">
+          <span>Volume</span>
+          <input type="range" class="slider" id="volumeSlider" min="0" max="1" step="0.01" value="0.7" style="max-width:160px;" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <audio id="audio" preload="metadata"></audio>
+
+  <script>
+    // ===== DADOS DAS MÚSICAS =====
+    const TRACKS = [
+      {
+        title: "Clean",
+        artist: "Taylor Swift",
+        cover: "https://media.base44.com/images/public/6a6cafde981d7c45d1acbe38/433c7f084_generated_image.png",
+        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+        about: 'Em "Clean", Taylor Swift fala sobre superar um relacionamento tóxico usando a metáfora da recuperação de um vício. A canção descreve a dor emocional e o processo de cura.'
+      },
+      {
+        title: "Dynamite",
+        artist: "BTS",
+        cover: "https://media.base44.com/images/public/6a6cafde981d7c45d1acbe38/ebd7db09f_generated_image.png",
+        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+        about: 'Uma canção solar e disco-pop sobre encontrar alegria nas pequenas coisas. "Dynamite" transforma um dia comum em celebração.'
+      },
+      {
+        title: "Sépia",
+        artist: "Trio Café",
+        cover: "https://media.base44.com/images/public/6a6cafde981d7c45d1acbe38/493dad9aa_generated_image.png",
+        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-11.mp3",
+        about: 'Um instrumental morno, gravado como se fosse fita cassete. As cordas soam distantes e o piano conduz a memória por uma cidade que já não existe mais.'
+      },
+      {
+        title: "Veludo",
+        artist: "Mar Azul",
+        cover: "https://media.base44.com/images/public/6a6cafde981d7c45d1acbe38/f944fb417_generated_image.png",
+        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
+        about: 'Uma balada noturna de voz aveludada e acordes suspensos. "Veludo" é o som que se ouve quando a cidade adormece.'
+      },
+    ];
+
+    // ===== ESTADO =====
+    let currentIndex = 0;
+    let isPlaying = false;
+    let isShuffled = false;
+    let isRepeating = false;
+    let isLiked = false;
+
+    // ===== REFERÊNCIAS =====
+    const audio = document.getElementById('audio');
+    const vinylDisc = document.getElementById('vinylDisc');
+    const vinylCover = document.getElementById('vinylCover');
+    const trackTitle = document.getElementById('trackTitle');
+    const trackArtist = document.getElementById('trackArtist');
+    const trackAbout = document.getElementById('trackAbout');
+    const playlistList = document.getElementById('playlistList');
+    const currentTimeEl = document.getElementById('currentTime');
+    const durationEl = document.getElementById('durationTime');
+    const progressSlider = document.getElementById('progressSlider');
+    const volumeSlider = document.getElementById('volumeSlider');
+    const btnPlay = document.getElementById('btnPlay');
+    const btnPause = document.getElementById('btnPause');
+    const btnPrev = document.getElementById('btnPrev');
+    const btnNext = document.getElementById('btnNext');
+    const btnShuffle = document.getElementById('btnShuffle');
+    const btnRepeat = document.getElementById('btnRepeat');
+    const likeBtn = document.getElementById('likeBtn');
+
+    function formatTime(seconds) {
+      if (!isFinite(seconds) || seconds < 0) seconds = 0;
+      const m = Math.floor(seconds / 60);
+      const s = Math.floor(seconds % 60);
+      return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+    }
+
+    function loadTrack(index) {
+      currentIndex = index;
+      const track = TRACKS[index];
+      audio.src = track.src;
+      audio.load();
+      vinylCover.src = track.cover;
+      trackTitle.textContent = track.title;
+      trackArtist.textContent = track.artist;
+      trackAbout.textContent = track.about;
+      currentTimeEl.textContent = '00:00';
+      durationEl.textContent = '00:00';
+      progressSlider.value = 0;
+      renderPlaylist();
+      if (isPlaying) {
+        audio.play().catch(() => { isPlaying = false; updatePlayState(); });
+      }
+    }
+
+    function play() {
+      audio.play().then(() => { isPlaying = true; updatePlayState(); })
+        .catch(() => { isPlaying = false; updatePlayState(); });
+    }
+
+    function pause() {
+      audio.pause();
+      isPlaying = false;
+      updatePlayState();
+    }
+
+    function updatePlayState() {
+      vinylDisc.classList.toggle('spinning', isPlaying);
+      btnPause.classList.toggle('active', isPlaying);
+      btnPlay.classList.toggle('active', !isPlaying);
+      renderPlaylist();
+    }
+
+    function nextTrack() {
+      if (isShuffled) {
+        currentIndex = Math.floor(Math.random() * TRACKS.length);
+      } else {
+        currentIndex = (currentIndex + 1) % TRACKS.length;
+      }
+      loadTrack(currentIndex);
+      if (isPlaying) play();
+    }
+
+    function prevTrack() {
+      currentIndex = (currentIndex - 1 + TRACKS.length) % TRACKS.length;
+      loadTrack(currentIndex);
+      if (isPlaying) play();
+    }
+
+    function renderPlaylist() {
+      playlistList.innerHTML = '';
+      TRACKS.forEach((track, i) => {
+        const li = document.createElement('li');
+        const btn = document.createElement('button');
+        if (i === currentIndex) btn.classList.add('active');
+        const img = document.createElement('img');
+        img.src = track.cover;
+        img.alt = 'Capa de ' + track.title;
+        const name = document.createElement('span');
+        name.className = 'track-name';
+        name.textContent = track.title;
+        btn.appendChild(img);
+        btn.appendChild(name);
+        if (i === currentIndex) {
+          const status = document.createElement('span');
+          status.className = 'status';
+          status.textContent = isPlaying ? 'tocando' : 'pausa';
+          btn.appendChild(status);
+        }
+        btn.addEventListener('click', () => {
+          if (i === currentIndex) {
+            isPlaying ? pause() : play();
+          } else {
+            loadTrack(i);
+            play();
+          }
+        });
+        li.appendChild(btn);
+        playlistList.appendChild(li);
+      });
+    }
+
+    // ===== EVENTOS DO AUDIO =====
+    audio.addEventListener('timeupdate', () => {
+      progressSlider.value = audio.currentTime;
+      currentTimeEl.textContent = formatTime(audio.currentTime);
+    });
+
+    audio.addEventListener('loadedmetadata', () => {
+      progressSlider.max = audio.duration;
+      durationEl.textContent = formatTime(audio.duration);
+    });
+
+    audio.addEventListener('ended', () => {
+      if (!isRepeating) nextTrack();
+    });
+
+    // ===== EVENTOS DOS BOTÕES =====
+    btnPlay.addEventListener('click', play);
+    btnPause.addEventListener('click', pause);
+    btnPrev.addEventListener('click', prevTrack);
+    btnNext.addEventListener('click', nextTrack);
+
+    btnShuffle.addEventListener('click', () => {
+      isShuffled = !isShuffled;
+      btnShuffle.classList.toggle('toggled', isShuffled);
+    });
+
+    btnRepeat.addEventListener('click', () => {
+      isRepeating = !isRepeating;
+      audio.loop = isRepeating;
+      btnRepeat.classList.toggle('toggled', isRepeating);
+    });
+
+    likeBtn.addEventListener('click', () => {
+      isLiked = !isLiked;
+      likeBtn.classList.toggle('liked', isLiked);
+      likeBtn.textContent = isLiked ? '🖤' : '🤍';
+    });
+
+    progressSlider.addEventListener('input', (e) => {
+      audio.currentTime = Number(e.target.value);
+      currentTimeEl.textContent = formatTime(audio.currentTime);
+    });
+
+    volumeSlider.addEventListener('input', (e) => {
+      audio.volume = Number(e.target.value);
+    });
+
+    // ===== INICIALIZAÇÃO =====
+    audio.volume = 0.7;
+    loadTrack(0);
+    updatePlayState();
+  </script>
+</body>
+</html>

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kaffee Für Alle — Jornais</title>
+  <meta name="description" content="Leia as manchetes dos principais jornais enquanto espera seu café." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../assets/css/main.css">
+
+  <style>
+    /* ===== ESTILOS DAS NOTÍCIAS ===== */
+    .frame-news {
+      background: #fff;
+      border: 1px solid hsl(0, 0%, 92%);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 4px 50px hsla(17, 46%, 20%, 0.10);
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 640px) { .frame-news { padding: 34px; } }
+    @media (min-width: 1024px) { .frame-news { padding: 48px; } }
+
+    .head-news { display: flex; align-items: center; gap: 12px; }
+    .head-news h1 {
+      margin: 0;
+      font-size: clamp(1.9rem, 4.6vw, 3.6rem);
+      font-weight: 900;
+      color: #3d2817;
+      font-family: 'Cinzel Decorative', serif;
+    }
+
+    .intro-news {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 22px;
+      align-items: center;
+      margin-bottom: 34px;
+    }
+
+    @media (min-width: 768px) {
+      .intro-news { grid-template-columns: 1fr 1fr; gap: 32px; }
+    }
+
+    .intro-news .hero {
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 12px 32px hsla(17, 46%, 20%, 0.12);
+    }
+    .intro-news .hero img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+
+    .chip {
+      cursor: pointer;
+      font-family: 'Quicksand', sans-serif;
+      text-transform: uppercase;
+      font-size: .72rem;
+      padding: 8px 14px;
+      border-radius: 9999px;
+      border: 1px solid hsl(0, 0%, 85%);
+      background: transparent;
+      color: #7a3f24;
+      transition: all .2s;
+    }
+
+    .chip:hover { border-color: #3d2817; }
+    .chip.active {
+      background: #3d2817;
+      color: #fff;
+      border-color: #3d2817;
+    }
+
+    .grid-news {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    @media (min-width: 640px) { .grid-news { grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 1024px) { .grid-news { grid-template-columns: 1fr 1fr 1fr; } }
+
+    .card-news {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px;
+      background: #f6f6f6;
+      border: 2px solid transparent;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all .22s;
+    }
+
+    .card-news:hover {
+      transform: translateY(-3px);
+      background: #e8e8e8;
+      border-color: #b17bc5;
+      box-shadow: 0 12px 32px hsla(17, 46%, 20%, 0.10);
+    }
+
+    .card-news .logo {
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      background: #fff;
+      border: 2px solid hsl(0, 0%, 90%);
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      font-family: 'Cinzel Decorative', serif;
+      font-weight: 700;
+      font-size: 1.4rem;
+      color: #3d2817;
+    }
+
+    .card-news .logo img { width: 100%; height: 100%; object-fit: contain; padding: 6px; }
+    .card-news .name {
+      font-family: 'Cinzel Decorative', serif;
+      font-weight: 700;
+      color: #3d2817;
+    }
+
+    .headlines {
+      display: flex;
+      flex-direction: column;
+      border-top: 1px solid #e8e8e8;
+    }
+
+    .headline {
+      display: block;
+      padding: 16px 0;
+      border-bottom: 1px solid #e8e8e8;
+      transition: background .2s, padding-left .2s;
+    }
+
+    .headline:hover { background: #f6f6f6; padding-left: 12px; }
+    .headline h3 {
+      margin: 0;
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1.15rem;
+      color: #3d2817;
+    }
+
+    .headline .meta {
+      margin-top: 6px;
+      font-size: .68rem;
+      text-transform: uppercase;
+      color: hsl(20, 28%, 60%);
+    }
+
+    .headline .paper-tag {
+      background: #f6f6f6;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      margin-right: 6px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 9999px;
+      border: 1px solid #3d2817;
+      color: #3d2817;
+      background: transparent;
+      font-family: 'Quicksand', sans-serif;
+      text-transform: uppercase;
+      font-size: .72rem;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .btn:hover { background: #3d2817; color: #fff; }
+    .btn.solid { background: #6b240f; color: #fff; border-color: #6b240f; }
+    .btn.solid:hover { background: #3d2817; }
+
+    .back-news {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #7a3f24;
+      font-size: .72rem;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .back-news:hover { color: #3d2817; }
+
+    .skeleton {
+      border-radius: 10px;
+      background: linear-gradient(90deg, #f6f6f6, #e8e8e8, #f6f6f6);
+      background-size: 800px 100%;
+      animation: shimmer 1.6s infinite linear;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -400px 0; }
+      100% { background-position: 400px 0; }
+    }
+
+    .warn {
+      background: #f6f6f6;
+      border: 1px solid #e8e8e8;
+      color: #3d2817;
+      padding: 12px 14px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container" style="max-width:1080px;margin:0 auto;">
+
+    <a href="../index.html" class="back-news">← Voltar ao menu</a>
+
+    <div class="frame-news" id="app-news">
+      <!-- Conteúdo gerado pelo JavaScript -->
+    </div>
+
+  </div>
+
+  <script>
+    // ============================================================
+    // NOTÍCIAS.JS - Lógica do leitor de notícias
+    // ============================================================
+
+    const CHAVE_SENHA = 'cafe_owner_password';
+    const CHAVE_SESSAO = 'cafe_owner_session';
+    const CHAVE_JORNAIS = 'cafe_newspapers';
+    const SENHA_PADRAO = 'cafe123';
+    const IMAGEM_CAPA = 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80';
+
+    const JORNAIS_PADRAO = [
+      { id: 'folha-sp', name: 'Folha de São Paulo', site: 'https://www.folha.uol.com.br/', rss: 'https://feeds.folha.uol.com.br/emcimadahora/rss091.xml', categories: ['Geral', 'Política', 'Economia'] },
+      { id: 'g1-globo', name: 'G1 Globo', site: 'https://g1.globo.com/', rss: 'https://g1.globo.com/rss/g1/', categories: ['Geral', 'Política', 'Economia', 'Esportes'] },
+      { id: 'tribuna', name: 'Tribuna', site: 'https://tribunapr.com.br/', rss: 'https://tribunapr.com.br/feed/', categories: ['Geral', 'Política'] },
+      { id: 'espn-brasil', name: 'ESPN Brasil', site: 'https://www.espn.com.br/', rss: 'https://www.espn.com.br/espn/rss/news', categories: ['Esportes'] },
+      { id: 'folha-litoral', name: 'Folha do Litoral News', site: 'https://folhadolitoralnews.com.br/', rss: 'https://folhadolitoralnews.com.br/feed/', categories: ['Geral'] },
+      { id: 'investnews', name: 'InvestNews', site: 'https://investnews.com.br/', rss: 'https://investnews.com.br/feed/', categories: ['Economia'] },
+    ];
+
+    const CATEGORIAS = ['Todos', 'Esportes', 'Economia', 'Política'];
+
+    const PALAVRAS_CHAVE = {
+      'Esportes': ['futebol', 'esporte', 'jogo', 'campeonato', 'copa', 'nba', 'gol', 'seleção', 'olímp', 'flamengo', 'palmeiras', 'corinthians', 'santos', 'vôlei', 'tênis', 'basquete'],
+      'Economia': ['economia', 'mercado', 'bolsa', 'dólar', 'dolar', 'inflação', 'juros', 'pib', 'investimento', 'ações', 'bitcoin', 'imposto', 'selic', 'câmbio', 'desemprego'],
+      'Política': ['polític', 'presidente', 'congresso', 'senado', 'câmara', 'deputado', 'governo', 'ministro', 'stf', 'supremo', 'eleição', 'partido', 'lula', 'bolsonaro', 'tse', 'pec'],
+    };
+
+    function carregarJornais() {
+      try {
+        const dados = localStorage.getItem(CHAVE_JORNAIS);
+        if (dados) return JSON.parse(dados);
+      } catch (e) {}
+      localStorage.setItem(CHAVE_JORNAIS, JSON.stringify(JORNAIS_PADRAO));
+      return JORNAIS_PADRAO;
+    }
+
+    function iconeDoSite(site) {
+      try {
+        const url = new URL(site);
+        return 'https://www.google.com/s2/favicons?domain=' + url.hostname + '&sz=128';
+      } catch (e) { return ''; }
+    }
+
+    function limparHTML(texto) {
+      const div = document.createElement('div');
+      div.innerHTML = texto;
+      return (div.textContent || '').replace(/\s+/g, ' ').trim();
+    }
+
+    function formatarData(dataStr) {
+      if (!dataStr) return '';
+      const d = new Date(dataStr);
+      if (isNaN(d)) return dataStr;
+      return d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+    }
+
+    function criarSlug(texto) {
+      return texto.toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '');
+    }
+
+    function el(tag, attrs = {}, ...children) {
+      const elemento = document.createElement(tag);
+      Object.entries(attrs).forEach(([chave, valor]) => {
+        if (chave === 'class') elemento.className = valor;
+        else if (chave.startsWith('on') && typeof valor === 'function')
+          elemento.addEventListener(chave.slice(2).toLowerCase(), valor);
+        else if (valor != null) elemento.setAttribute(chave, valor);
+      });
+      children.flat().forEach(c => {
+        elemento.append(c && c.nodeType ? c : document.createTextNode(c ?? ''));
+      });
+      return elemento;
+    }
+
+    const cache = new Map();
+
+    async function buscarManchetes(jornal) {
+      if (cache.has(jornal.id)) return cache.get(jornal.id);
+      try {
+        const urlApi = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(jornal.rss);
+        const resposta = await fetch(urlApi);
+        if (!resposta.ok) throw new Error('HTTP ' + resposta.status);
+        const dados = await resposta.json();
+        if (dados.status !== 'ok') throw new Error(dados.message || 'feed error');
+        const manchetes = (dados.items || []).map(item => ({
+          title: item.title,
+          link: item.link,
+          summary: limparHTML(item.description || item.content),
+          pubDate: item.pubDate
+        }));
+        const resultado = { items: manchetes };
+        cache.set(jornal.id, resultado);
+        return resultado;
+      } catch (erro) {
+        const resultado = { items: [], error: 'Não foi possível carregar o feed de ' + jornal.name + '.' };
+        cache.set(jornal.id, resultado);
+        return resultado;
+      }
+    }
+
+    function criarLinhaManchete(item, indice, mostrarJornal) {
+      const link = el('a', {
+        class: 'headline',
+        href: item.link,
+        target: '_blank',
+        rel: 'noopener noreferrer',
+        style: 'animation-delay:' + (indice * 35) + 'ms'
+      });
+      const caixa = el('div', {});
+      caixa.append(el('h3', {}, item.title || 'Sem título'));
+      if (item.summary) caixa.append(el('p', { style: 'margin:6px 0 0;font-size:.9rem;color:#7a3f24' }, item.summary));
+      const meta = el('div', { class: 'meta' });
+      if (mostrarJornal && item.paper) {
+        meta.append(el('span', { class: 'paper-tag' }, item.paper.name));
+      }
+      if (item.pubDate) meta.append(document.createTextNode(formatarData(item.pubDate)));
+      if (meta.childNodes.length) caixa.append(meta);
+      link.append(caixa);
+      return link;
+    }
+
+    // ===== RENDERIZAÇÃO PRINCIPAL =====
+    function renderizarNoticias() {
+      const app = document.getElementById('app-news');
+      if (!app) return;
+
+      const categoriaAtual = { valor: 'Todos' };
+      const jornais = carregarJornais();
+
+      const frame = el('div', { class: 'frame-news' });
+
+      frame.append(
+        el('div', { class: 'head-news' },
+          el('h1', {}, 'Principais Jornais')
+        ),
+        el('div', { style: 'height:1px;margin:14px 0 26px;background:linear-gradient(90deg,#e8e8e8,transparent);' })
+      );
+
+      const intro = el('div', { class: 'intro-news' });
+      intro.append(
+        el('p', { style: 'font-family:inherit;font-size:clamp(1.15rem,2.6vw,1.9rem);color:#3d2817' },
+          'Aperte algum link e você será encaminhado para o jornal'
+        ),
+        el('div', { class: 'hero' },
+          el('img', { src: IMAGEM_CAPA, alt: 'Jornais e café', loading: 'lazy' })
+        )
+      );
+      frame.append(intro);
+
+      const chips = el('div', { class: 'chips' });
+      CATEGORIAS.forEach(cat => {
+        const botao = el('button', {
+          class: 'chip' + (cat === categoriaAtual.valor ? ' active' : ''),
+          onclick: () => selecionarCategoria(cat)
+        }, cat);
+        chips.append(botao);
+      });
+      frame.append(chips);
+
+      const areaConteudo = el('div', { id: 'grid-content' });
+      frame.append(areaConteudo);
+
+      app.innerHTML = '';
+      app.append(frame);
+
+      function selecionarCategoria(cat) {
+        categoriaAtual.valor = cat;
+        document.querySelectorAll('.chip').forEach(c =>
+          c.classList.toggle('active', c.textContent === cat)
+        );
+        desenharConteudo();
+      }
+
+      async function desenharConteudo() {
+        areaConteudo.innerHTML = '';
+
+        if (categoriaAtual.valor === 'Todos') {
+          const grade = el('div', { class: 'grid-news' });
+          jornais.forEach((jornal, indice) => {
+            const card = el('a', {
+              class: 'card-news',
+              href: '#/jornal/' + jornal.id,
+              style: 'animation-delay:' + (indice * 70) + 'ms'
+            });
+            const logo = el('div', { class: 'logo' });
+            const img = el('img', { src: iconeDoSite(jornal.site), alt: jornal.name, loading: 'lazy' });
+            img.onerror = () => { logo.textContent = jornal.name.charAt(0).toUpperCase(); };
+            logo.append(img);
+            card.append(logo, el('div', { class: 'info' },
+              el('div', { class: 'name' }, jornal.name),
+              el('div', { style: 'font-size:.85rem;color:#7a3f24;margin-top:4px' }, 'Ver manchetes →')
+            ));
+            grade.append(card);
+          });
+          areaConteudo.append(grade);
+
+        } else {
+          areaConteudo.append(
+            el('div', { class: 'skeleton', style: 'height:80px;margin-bottom:10px' }),
+            el('div', { class: 'skeleton', style: 'height:80px;margin-bottom:10px' }),
+            el('div', { class: 'skeleton', style: 'height:80px' })
+          );
+
+          const jornaisRelevantes = jornais.filter(j =>
+            (j.categories || []).includes(categoriaAtual.valor)
+          );
+          const fontes = jornaisRelevantes.length ? jornaisRelevantes : jornais;
+
+          const resultados = await Promise.all(fontes.map(buscarManchetes));
+          let todasManchetes = [];
+          resultados.forEach((res, i) => {
+            if (!res || !res.items) return;
+            res.items.forEach(item => {
+              todasManchetes.push({ ...item, paper: fontes[i] });
+            });
+          });
+
+          const palavras = PALAVRAS_CHAVE[categoriaAtual.valor] || [];
+          const filtradas = todasManchetes.filter(item => {
+            const texto = ((item.title || '') + ' ' + (item.summary || '')).toLowerCase();
+            return palavras.some(p => texto.includes(p));
+          });
+
+          filtradas.sort((a, b) => new Date(b.pubDate || 0) - new Date(a.pubDate || 0));
+
+          areaConteudo.innerHTML = '';
+
+          if (!filtradas.length) {
+            areaConteudo.append(el('div', { class: 'warn' },
+              'Nenhuma manchete encontrada em "' + categoriaAtual.valor + '" agora.'
+            ));
+            return;
+          }
+
+          const lista = el('div', { class: 'headlines' });
+          filtradas.slice(0, 30).forEach((item, idx) =>
+            lista.append(criarLinhaManchete(item, idx, true))
+          );
+          areaConteudo.append(lista);
+        }
+      }
+
+      desenharConteudo();
+    }
+
+    document.addEventListener('DOMContentLoaded', renderizarNoticias);
+  </script>
+</body>
+</html>

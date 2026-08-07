@@ -120,6 +120,29 @@ const produtos = [
       descricao: "Substituto natural do cacau, totalmente livre de estimulantes. Por que não faz mal: A alfarroba é um substituto natural do cacau que não possui nenhum estimulante.",
       categoria: "cafeina",
       tipo: "gelada"
+    },
+  
+    // Sem Glúten
+    { 
+      nome: "Smoothie de Banana com Cacau", 
+      preco: "R$ 14,90", 
+      descricao: "Banana batida com cacau 100% e leite de amêndoas. Por que não faz mal: Nenhum ingrediente contém trigo ou gluten.",
+      categoria: "gluten",
+      tipo: "gelada"
+    },
+    { 
+      nome: "Chocolate Quente de Milho Roxo", 
+      preco: "R$ 13,50", 
+      descricao: "Cremoso chocolate feito com leite de amêndoas e amido de milho. Por que não faz mal: Sem ingredientes de trigo ou derivados.",
+      categoria: "gluten",
+      tipo: "quente"
+    },
+    { 
+      nome: "Latte de Aveia com Canela", 
+      preco: "R$ 14,00", 
+      descricao: "Espresso com leite de aveia e canela polvilhada. Por que não faz mal: A aveia utilizada é certificada sem gluten.",
+      categoria: "gluten",
+      tipo: "quente"
     }
   ];
   

@@ -31,6 +31,12 @@ const paesEspeciais = {
     { nome: "Pão de Batata Doce", preco: "R$ 7,00", descricao: "Pão suave adocicado pela batata doce, sem estimulantes." },
     { nome: "Pão Integral de Sementes", preco: "R$ 8,00", descricao: "Pão integral com linhaça e gergelim, perfeito a qualquer hora." },
     { nome: "Pão de Milho Sem Cafeína", preco: "R$ 6,50", descricao: "Pão tradicional de milho, sem cafeína e sem lactose." }
+  ],
+  gluten: [
+    { nome: "Pão de Fermentação Natural", preco: "R$ 8,00", descricao: "Pão rústico de longa fermentação, com casca crocante." },
+    { nome: "Focaccia de Alecrim", preco: "R$ 9,00", descricao: "Focaccia italiana com alecrim e azeite extravirgem." },
+    { nome: "Pão Australiano", preco: "R$ 7,50", descricao: "Pão escuro com toque adocicado, textura macia." },
+    { nome: "Ciabatta Artesanal", preco: "R$ 8,50", descricao: "Ciabatta clássica com miolo alveolado e casca dourada." }
   ]
 };
 

@@ -31,6 +31,12 @@
       { nome: "Sanduíche de Frango", preco: "R$ 13,50", descricao: "Sanduíche de frango desfiado." },
       { nome: "Esfiha de Ricota", preco: "R$ 10,00", descricao: "Esfiha recheada com ricota cremosa." },
       { nome: "Bolinho de Arroz", preco: "R$ 8,50", descricao: "Bolinho de arroz frito e crocante." }
+    ],
+    gluten: [
+      { nome: "Coxinha de Frango com Farinha de Arroz", preco: "R$ 10,00", descricao: "Coxinha preparada com massa de farinha de arroz, sem gluten." },
+      { nome: "Pastel de Queijo com Polvilho", preco: "R$ 9,00", descricao: "Pastel de polvilho assado, recheado com queijo." },
+      { nome: "Nuggets de Frango com Aveia", preco: "R$ 11,00", descricao: "Nuggets de frango empanados com aveia certificada sem gluten." },
+      { nome: "Bolinho de Batata Doce", preco: "R$ 8,50", descricao: "Bolinho frito de batata doce, naturalmente sem gluten." }
     ]
   };
   

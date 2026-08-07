@@ -38,6 +38,12 @@
       { nome: "Mousse de Chocolate Branco", preco: "R$ 11,00", descricao: "Mousse de chocolate branco." },
       { nome: "Bolo de Baunilha", preco: "R$ 10,00", descricao: "Bolo de baunilha macio." },
       { nome: "Pavê de Baunilha", preco: "R$ 13,00", descricao: "Pavê de baunilha delicioso." }
+    ],
+    gluten: [
+      { nome: "Brigadeiro de Farinha de Arroz", preco: "R$ 9,00", descricao: "Brigadeiro preparado com farinha de arroz, sem gluten." },
+      { nome: "Pudim de Leite Sem Gluten", preco: "R$ 10,00", descricao: "Pudim tradicional feito sem ingredientes com trigo." },
+      { nome: "Mousse de Chocolate com Polvilho", preco: "R$ 12,00", descricao: "Mousse cremosa com base de polvilho, sem gluten." },
+      { nome: "Bolo de Milho Cremoso", preco: "R$ 11,00", descricao: "Bolo macio feito apenas com farinha de milho, naturalmente sem gluten." }
     ]
   };
   

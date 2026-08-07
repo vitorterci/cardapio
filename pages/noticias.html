@@ -423,7 +423,9 @@
           jornais.forEach((jornal, indice) => {
             const card = el('a', {
               class: 'card-news',
-              href: '#/jornal/' + jornal.id,
+              href: jornal.site,
+              target: '_blank',
+              rel: 'noopener noreferrer',
               style: 'animation-delay:' + (indice * 70) + 'ms'
             });
             const logo = el('div', { class: 'logo' });

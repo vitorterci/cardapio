@@ -177,19 +177,19 @@
   }
   
   .ilustra-bebidas {
-    background-image: url("../img/cardapios/bebida.png");
+    background-image: url("../img/bebida.png");
   }
   
   .ilustra-salgados {
-    background-image: url("../img/cardapios/salgados.png");
+    background-image: url("../img/salgados.png");
   }
   
   .ilustra-doces {
-    background-image: url("../img/cardapios/doce.png");
+    background-image: url("../img/doce.png");
   }
   
   .ilustra-paes {
-    background-image: url("../img/cardapios/paes.png");
+    background-image: url("../img/paes.png");
   }
   
   /* ===== CATEGORIAS ===== */
